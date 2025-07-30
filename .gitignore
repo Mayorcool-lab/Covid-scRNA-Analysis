@@ -1,0 +1,23 @@
+# Ignore large datasets and intermediate results
+data/
+results/anndata/
+*.h5ad
+*.loom
+*.bam
+*.csv
+*.tsv
+*.mtx
+*.npz
+*.h5
+*.zip
+
+# Ignore Python cache
+__pycache__/
+*.pyc
+
+# Ignore notebook checkpoints
+.ipynb_checkpoints/
+
+# VSCode or Jupyter specific
+.vscode/
+.env
