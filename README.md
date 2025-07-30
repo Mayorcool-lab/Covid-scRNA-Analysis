@@ -1,4 +1,4 @@
- # 🦠 Single-Cell Transcriptomic Analysis of COVID-19 Infected Human Lungs | Scanpy + Snakemake
+ # 🦠 Single-Cell Transcriptomic Analysis of COVID-10 Infected Human Lungs | Scanpy + Snakemake
 
 This project presents a **reproducible single-cell RNA-seq (scRNA-seq) analysis** pipeline for **post-mortem lung samples** from COVID-19 patients using **Scanpy**, **Snakemake**, **Scrublet**, and Python data science tools. The pipeline is modular, version-controlled, and optimized for reproducibility and scalability.
 
