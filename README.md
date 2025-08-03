@@ -1,60 +1,99 @@
- # 🦠 Single-Cell Transcriptomic Analysis of COVID-10 Infected Human Lungs | Scanpy + Snakemake
+# COVID-19 Lung scRNA-seq Analysis (Scanpy Pipeline)
 
-This project presents a **reproducible single-cell RNA-seq (scRNA-seq) analysis** pipeline for **post-mortem lung samples** from COVID-19 patients using **Scanpy**, **Snakemake**, **Scrublet**, and Python data science tools. The pipeline is modular, version-controlled, and optimized for reproducibility and scalability.
+![scRNA-seq Workflow](https://img.shields.io/badge/Analysis-scanpy-blue)
+![License](https://img.shields.io/badge/License-MIT-green)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 
----
+## 🔍 Project Overview
+This repository presents a complete Python-based single-cell RNA-seq (scRNA-seq) pipeline analyzing COVID-19 lung tissue data from the study:
+**"A molecular single-cell lung atlas of lethal COVID-19"**
 
-## 🎯 Objective
+- Annotate immune and epithelial populations in lethal COVID-19 lungs.
+- Discover COVID-driven changes in cell proportions and gene expression.
+- Identify cell-type-specific biomarkers and enriched immune pathways.
 
-To analyze cellular heterogeneity in COVID-19-infected lungs, identify **highly variable genes (HVGs)**, perform **clustering**, **UMAP visualization**, and prepare the data for **downstream differential expression** and **cell–cell interaction analysis**. The project aims to pinpoint candidate genes and pathways involved in **inflammation, impaired regeneration**, and **fibrosis**.
+### Key Features
+- ✅ **Modernized workflow**: Replaces original Seurat/R implementation with Scanpy/Python
+- ✅ **End-to-end analysis**: From raw data merging to pathway enrichment
+- ✅ **Reproducible**: Showcase best practices in scRNA-seq analysis using Scanpy, Git, and Snakemake.
 
----
 
-## 📚 Dataset
+## 🧪 Biological Objectives
+1. Identify cell populations enriched in COVID-19 lungs
+2. Discover cell-type-specific differentially expressed genes (DEGs)
+3. Characterize altered biological pathways in:
+   - Alveolar Macrophages
+   - NK Cells
 
-- **Source**: [COVID-19 lung single-nucleus RNA-seq study (Nature, 2021)](https://doi.org/10.1038/s41586-021-03504-w)
-- **Samples**: Autopsy-derived lung tissues from COVID-19 fatalities and healthy controls
-- **Format**: Preprocessed gene-cell count matrices (`.csv`) per sample
+## 🛠️ Complete Analysis Pipeline
 
----
+The analysis pipeline is structured as a series of Jupyter notebooks, which are also integrated into an automated **Snakemake** workflow for full reproducibility.
 
-## 🛠️ Tools & Packages
+### 📁 0. Data Merging (`merge_counts.ipynb`)
+**Goal**: Combine raw count matrices into unified AnnData object
+**Key Steps**:
+- Load multiple sample-specific CSV files
+- Concatenate with sample/condition metadata
+- Output: `merged_counts.h5ad`
 
-- `Scanpy`, `anndata`, `matplotlib`, `numpy`, `pandas`
-- `Scrublet` (doublet detection)
-- `Snakemake` (pipeline automation)
-- `Git LFS` (for tracking large `.h5ad` files)
-- Reproducibility via `conda` (`envs/scanpy_env.yml`)
+### 📁 1. Quality Control (`01_quality_control.ipynb`)
+**Goal**: Filter low-quality cells and genes
+**Methods**:
+- Remove cells with:
+  - High mitochondrial content (>10%)
+  - Low gene counts (<200 genes/cell)
+- Doublet detection (Scrublet)
+**Output**: `qc_nodoublets.h5ad`
 
----
+### 📁 2. Preprocessing & Clustering (`02_preprocessing_and_clustering.ipynb`)
+**Goal**: Normalize and cluster cells
+**Workflow**:
+1. Normalization: `sc.pp.normalize_total()` + `sc.pp.log1p()`
+2. Feature selection: HVGs (`sc.pp.highly_variable_genes`)
+3. Dimensionality reduction: PCA → UMAP
+4. Clustering: Leiden algorithm
+**Output**: Cluster-labeled UMAP plots
 
-## 🔄 Analysis Workflow
+### 📁 3. Marker Identification (`03_marker_annotation.ipynb`)
+**Goal**: Find cluster biomarkers
+**Methods**:
+- Wilcoxon rank-sum test (`sc.tl.rank_genes_groups`)
+- Top 5 markers per cluster exported to CSV
 
-### 📁 Phase 1: Data Import & Merging
-- Loaded raw count matrices per sample
-- Merged into single `AnnData` object
-- Tracked sample and condition metadata
+### 📁 4. Cell Type Annotation (`04_celltype_annotation.ipynb`)
+**Goal**: Assign biological identities
+**Approach**:
+1. Automated annotation: CellTypist (immune/epithelial models)
+2. Manual validation: Canonical marker expression
+3. Finalized 10 major lung cell types
+**Output**: Annotated UMAPs + cell type proportion plots
 
-### 🧹 Phase 2: Quality Control
-- Filtered out low-quality cells and genes
-- Removed cells with high mitochondrial/ribosomal content
-- Detected and excluded doublets with Scrublet
+### 📁 5. Differential Expression (`05_differential_expression.ipynb`)
+**Goal**: Identify COVID-associated DEGs
+**Focus Populations**:
+- Alveolar Macrophages
+- NK Cells
+**Thresholds**: adj-p < 0.05, logFC > 0
+**Visualizations**: Dot plots, heatmaps
 
-### 🧪 Phase 3: Normalization & HVG Selection
-- Total-count normalization and log1p transform
-- Identified highly variable genes (HVGs)
-- Saved HVG plot and filtered object
+### 📁 6. Pathway Enrichment (`06_pathway_enrichment.ipynb`)
+**Goal**: Uncover altered biological pathways
+**Databases**:
+- GO Biological Processes
+- KEGG
+- Reactome
+**Key Findings**:
+- Macrophages: Inflammatory cytokine signaling
+- NK Cells: Cytotoxic effector functions
 
-### 📊 Phase 4: Dimensionality Reduction & Clustering
-- Scaled data and ran PCA
-- Computed neighborhood graph
-- Performed Leiden clustering (resolution = 0.5)
-- Visualized results with UMAP
-- Plotted clusters, QC metrics, and batch effects
 
-📌 *Status: downstream steps such as DE analysis, marker identification, and cell-type annotation are in progress.*
+## 📁 Repo Structure (Planned)
 
----
-
-## 📁 Project Structure
-
+```bash
+Covid-scRNA-Analysis/
+├── notebook/           # ✅ All updated notebooks (merge_counts → 06)
+├── scripts/            # 🔜 Python modules for each phase
+├── Snakefile           # 🔜 Snakemake pipeline for automation
+├── envs/               # ✅ Conda environment definitions
+├── .gitignore          # ✅ Ignore .csv/.png/.h5ad outputs
+├── README.md           # ✅ You’re reading it!
