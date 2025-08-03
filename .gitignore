@@ -1,0 +1,19 @@
+# Ignore Jupyter checkpoint files
+.ipynb_checkpoints/
+
+# Ignore large files
+*.h5ad
+*.csv
+*.png
+*.pdf
+*.zip
+
+# Ignore data/result folders
+results/
+figures/
+data/
+
+# Ignore environments
+env/
+.venv/
+ 
