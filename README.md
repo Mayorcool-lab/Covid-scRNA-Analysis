@@ -92,8 +92,8 @@ The analysis pipeline is structured as a series of Jupyter notebooks, which are 
 ```bash
 Covid-scRNA-Analysis/
 ├── notebook/           # ✅ All updated notebooks (merge_counts → 06)
-├── scripts/            # 🔜 Python modules for each phase
-├── Snakefile           # 🔜 Snakemake pipeline for automation
+├── scripts/            # ✅ Python modules for each phase
+├── Snakefile           # ✅ Snakemake pipeline for automation
 ├── envs/               # ✅ Conda environment definitions
 ├── .gitignore          # ✅ Ignore .csv/.png/.h5ad outputs
 ├── README.md           # ✅ You’re reading it!
